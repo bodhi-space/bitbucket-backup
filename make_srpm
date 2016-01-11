@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ -z "${PACKAGE_MAINTAINER}" ] ; then
+    PACKAGE_MAINTAINER=$( \
+        getent passwd \
+        | awk -v FS=: "\$3 ~ /^${UID}\$/ {print \$5}" \
+        | sed -e 's/\([^[:space:]]*\) \{1,\}\([^[:space:]]*\)/\1 \2 <\L\1.\2@hotschedules.com>/' \
+    )
+fi
+
+if [ -z "${PYTHON}" ] ; then
+    PYTHON=/usr/bin/python2.7
+fi
+
+PYTHON_MAJOR_VERSION=$( \
+    ${PYTHON} --version 2>&1 \
+    | sed -e 's/^.*[[:space:]]\([[:digit:]]\{1,\}\.[[:digit:]]\{1,\}\).*$/\1/' \
+)
+
+${PYTHON} setup.py bdist_rpm \
+    --distribution-name amzn \
+    --source-only \
+    --requires "python(abi) = ${PYTHON_MAJOR_VERSION}" \
+    --python ${PYTHON} \
+    --packager "${PACKAGE_MAINTAINER}"
