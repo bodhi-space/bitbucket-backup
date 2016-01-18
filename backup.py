@@ -186,14 +186,13 @@ def main():
             compress(repo, location)
         debug("Finished!", True)
     except HTTPError as err:
-        if err.code == 401:
-            exit("Unauthorized! Check your credentials and try again.", 22)  # EINVAL - Invalid argument
-        else:
-            exit("Connection Error! Bitbucket returned HTTP error [%s]." % err.code)
+        exit("Connection Error! Bitbucket returned HTTP error [%s]." % err.code, 22)
     except URLError as e:
         exit("Unable to reach Bitbucket: %s." % e.reason, 101)  # ENETUNREACH - Network is unreachable
-    except (KeyboardInterrupt, SystemExit):
-        exit("Operation cancelled. There might be inconsistent data in location directory.", 0)
+    except KeyboardInterrupt:
+        exit("Operation cancelled. There might be inconsistent data in location directory.", 10)
+    except SystemExit:
+        exit("Operation exited abnormally. There might be inconsistent data in location directory.", 11)
     except:
         if not _quiet:
             import traceback
