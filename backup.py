@@ -7,6 +7,9 @@ from getpass import getpass
 
 import bitbucket
 
+import time
+import shutil
+
 try:
     from urllib.error import HTTPError, URLError
 except ImportError:
@@ -103,10 +106,39 @@ def clone_repo(repo, backup_dir, http, username, password, mirror=False, with_wi
     if not command:
         exit("could not build command (scm [%s] not recognized?)" % scm)
     debug("Cloning %s..." % repo.get('name'))
-    exec_cmd('%s "%s"' % (command, backup_dir))
+
+    tries = 0
+    succeeded = False
+    while tries < 10 and not succeeded:
+        try:
+            exec_cmd('%s "%s"' % (command, backup_dir))
+        except SystemExit:
+            if os.path.exists(backup_dir):
+                shutil.rmtree(backup_dir)
+            time.sleep(60)
+            tries += 1
+        else:
+            succeeded = True
+    if not succeeded:
+        raise SystemExit
+
     if with_wiki and repo.get('has_wiki'):
         debug("Cloning %s's Wiki..." % repo.get('name'))
-        exec_cmd("%s/wiki %s_wiki" % (command, backup_dir))
+
+        tries = 0
+        succeeded = False
+        while tries < 10 and not succeeded:
+            try:
+                exec_cmd("%s/wiki %s_wiki" % (command, backup_dir))
+                if os.path.exists('%s_wiki' % ( backup_dir )):
+                    shutil.rmtree('%s_wiki' % ( backup_dir ))
+            except SystemExit:
+                time.sleep(60)
+                tries += 1
+            else:
+                succeeded = True
+        if not succeeded:
+            raise SystemExit
 
 
 def update_repo(repo, backup_dir, with_wiki=False):
