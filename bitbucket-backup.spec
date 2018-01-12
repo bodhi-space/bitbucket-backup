@@ -8,7 +8,8 @@ License: DO WHAT YOU WANT TO PUBLIC LICENSE
 Group: System/Backups
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
-Requires: python(abi) = 2.7
+Requires: python27
+BuildRequires: python27-setuptools
 
 %description
 A bitbucket backup script forked by Hotschedules in order to fix some bugs.
