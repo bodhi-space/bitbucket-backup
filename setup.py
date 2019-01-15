@@ -17,7 +17,7 @@ SCRIPTS = ['backup.py', 'bitbucket-backup']
 
 setup(
     name='bitbucket-backup',
-    version='0.2.0',
+    version='0.2.1',
     author='Sam Kuehn',
     author_email='samkuehn@gmail.com',
     url='https://github.com/samkuehn/bitbucket-backup',
