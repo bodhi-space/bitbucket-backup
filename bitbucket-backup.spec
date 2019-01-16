@@ -30,6 +30,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 
 %changelog
+* Wed Jan 16 2019 Alex Yamauchi <alex.yamauchi@hotschdules.com> - 0.2.3-3
+- updating from the upstream, which does not use versioning.
 * Thu Jan 11 2018 Tom Williams <tom.williams@hotschedules.com> - 0.2.2-3
 - update spec, move to main source tree.
 * Wed May 17 2017 Alex Yamauchi <alex.yamauchi@hotschedules.com>
